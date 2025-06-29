@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <!-- Simple colored console for development -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} %highlight(%-5level) %cyan(%logger{25}) %green([%X{traceId}]) : %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- JSON for production -->
+    <appender name="JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <includeContext>true</includeContext>
+            <includeMdc>true</includeMdc>
+        </encoder>
+    </appender>
+
+    <!-- Default: Simple colored output -->
+    <springProfile name="!production">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+        <logger name="vn.ghtk.nvbc" level="DEBUG"/>
+    </springProfile>
+
+    <!-- Production: JSON output -->
+    <springProfile name="production">
+        <root level="INFO">
+            <appender-ref ref="JSON"/>
+            <appender-ref ref="Sentry"/>
+        </root>
+    </springProfile>
+
+</configuration>
