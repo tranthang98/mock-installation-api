@@ -2,7 +2,6 @@ package com.mockapi.dto;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
-import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,7 +14,6 @@ import java.util.List;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public class CreateOrderRequest {
 
-    @NotEmpty(message = "Products cannot be empty")
     private List<Product> products;
 
     @NotNull(message = "Address is required")
@@ -28,12 +26,8 @@ public class CreateOrderRequest {
     @Setter
     @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class Product {
-        @NotNull(message = "Product name is required")
         private String name;
-
         private String type;
-
-        @NotNull(message = "Quantity is required")
         private Integer quantity;
     }
 
