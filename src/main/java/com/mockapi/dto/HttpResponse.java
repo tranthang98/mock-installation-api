@@ -23,11 +23,19 @@ public class HttpResponse<T> {
     @JsonProperty("status")
     private Integer status;
 
-    public static <T> HttpResponse<T> success(T data) {
+    public static <T> HttpResponse<T> success(String message, T data) {
         return HttpResponse.<T>builder()
                 .success(true)
-                .message("Success")
+                .message(message)
                 .data(data)
+                .status(200)
+                .build();
+    }
+
+    public static <T> HttpResponse<T> success(String message) {
+        return HttpResponse.<T>builder()
+                .success(true)
+                .message(message)
                 .status(200)
                 .build();
     }

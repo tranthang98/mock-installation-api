@@ -1,8 +1,9 @@
 package com.mockapi.controller;
 
-import com.mockapi.dto.CreateOrderRequest;
 import com.mockapi.dto.HttpResponse;
-import com.mockapi.dto.RequestInstallationResponse;
+import com.mockapi.dto.request.CancelOrderRequest;
+import com.mockapi.dto.request.CreateOrderRequest;
+import com.mockapi.dto.response.RequestInstallationResponse;
 import com.mockapi.service.TrackingCodeService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,7 +52,7 @@ public class InstallationController {
                     .build();
 
             // ✅ Wrap in HttpResponse format
-            HttpResponse<RequestInstallationResponse> response = HttpResponse.success(responseData);
+            HttpResponse<RequestInstallationResponse> response = HttpResponse.success("Register successfully", responseData);
 
             return ResponseEntity.ok(response);
 
@@ -66,9 +66,22 @@ public class InstallationController {
         }
     }
 
-    /**
-     * ✅ Health check endpoint
-     */
+    @PostMapping("/cancel")
+    public ResponseEntity<HttpResponse<?>> cancelInstallOrder(@Valid @RequestBody CancelOrderRequest request) {
+        try {
+            HttpResponse<Void> response = HttpResponse.success("Cancel successfully!");
+
+            return ResponseEntity.ok(response);
+
+        } catch (Exception e) {
+
+            HttpResponse<?> errorResponse =
+                    HttpResponse.error("Failed to process registration: " + e.getMessage(), 500);
+
+            return ResponseEntity.status(500).body(errorResponse);
+        }
+    }
+
     @GetMapping("/health")
     public ResponseEntity<Map<String, Object>> healthCheck() {
         return ResponseEntity.ok(Map.of(
@@ -77,20 +90,5 @@ public class InstallationController {
                 "service", "Mock Installation API",
                 "version", "1.0.0"
         ));
-    }
-
-    /**
-     * ✅ Get tracking info (bonus endpoint)
-     */
-    @GetMapping("/tracking/{trackingCode}")
-    public ResponseEntity<HttpResponse<Map<String, Object>>> getTrackingInfo(@PathVariable String trackingCode) {
-        Map<String, Object> trackingData = Map.of(
-                "tracking_code", trackingCode,
-                "status", "REGISTERED",
-                "created_at", LocalDateTime.now(),
-                "estimated_install_date", LocalDateTime.now().plusDays(3)
-        );
-
-        return ResponseEntity.ok(HttpResponse.success(trackingData));
     }
 }

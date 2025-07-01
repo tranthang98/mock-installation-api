@@ -1,4 +1,4 @@
-package com.mockapi.dto;
+package com.mockapi.dto.response;
 
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;

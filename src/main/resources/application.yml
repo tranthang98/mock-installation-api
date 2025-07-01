@@ -3,6 +3,10 @@ server:
   servlet:
     context-path: /
 
+app:
+  tracking:
+    prefix: ${TRACKING_PREFIX:INST}
+
 spring:
   application:
     name: mock-installation-api
